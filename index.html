@@ -3,531 +3,1959 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>暑假收尾避难所 | 作业写不完先歇会儿</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        dark: '#0f0f14',
-                        card: '#1a1a24',
-                        line: '#2a2a38',
-                        muted: '#8b8ba3',
-                        accent: '#7c5cff',
-                        neon: '#00d4ff',
-                        pink: '#ff6b9d',
-                    },
-                    fontFamily: {
-                        sans: ['"Noto Sans SC"', '"Inter"', 'sans-serif'],
-                    },
-                }
-            }
+    <title>新学期 · 出发 — 开学季特别页面</title>
+    <style>
+        /* ============ CSS 变量与全局 ============ */
+        :root {
+            --bg-primary: #0a0a1a;
+            --bg-secondary: #101025;
+            --card-bg: rgba(255, 255, 255, 0.06);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --card-hover: rgba(255, 255, 255, 0.1);
+            --text-primary: #e8e8f0;
+            --text-secondary: #a0a0b8;
+            --text-muted: #6b6b85;
+            --accent-1: #7c3aed;
+            --accent-2: #06b6d4;
+            --accent-3: #f59e0b;
+            --accent-4: #ec4899;
+            --gradient-main: linear-gradient(135deg, #7c3aed, #06b6d4);
+            --gradient-warm: linear-gradient(135deg, #f59e0b, #ec4899);
+            --gradient-hero: linear-gradient(135deg, #a78bfa, #22d3ee);
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-glow: 0 0 60px rgba(124, 58, 237, 0.15);
+            --font-sans: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', system-ui, -apple-system, sans-serif;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-    </script>
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .glass {
-                background: rgba(26, 26, 36, 0.6);
-                backdrop-filter: blur(20px);
-                -webkit-backdrop-filter: blur(20px);
-                border: 1px solid rgba(255, 255, 255, 0.06);
-            }
-            .glow-text {
-                text-shadow: 0 0 30px rgba(124, 92, 255, 0.5);
-            }
-            .card-hover {
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-            .card-hover:hover {
-                transform: translateY(-6px);
-                border-color: rgba(124, 92, 255, 0.3);
-                box-shadow: 0 20px 40px -20px rgba(124, 92, 255, 0.4);
-            }
-            .gradient-text {
-                background: linear-gradient(135deg, #7c5cff 0%, #00d4ff 50%, #ff6b9d 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-            }
-            @keyframes fadeUp {
-                from { opacity: 0; transform: translateY(20px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            .fade-up {
-                animation: fadeUp 0.8s ease-out forwards;
-            }
-            .delay-100 { animation-delay: 0.1s; }
-            .delay-200 { animation-delay: 0.2s; }
-            .delay-300 { animation-delay: 0.3s; }
 
-            /* 动态背景画布 */
-            .bg-canvas {
-                position: fixed;
-                inset: 0;
-                z-index: 0;
-                pointer-events: none;
-                overflow: hidden;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ============ Canvas 动态粒子背景（慢速版） ============ */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* 浮动光晕背景 - 放慢动画 */
+        .bg-glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            pointer-events: none;
+            animation: floatGlow 25s ease-in-out infinite;
+        }
+        .bg-glow-1 {
+            width: 500px;
+            height: 500px;
+            background: rgba(124, 58, 237, 0.15);
+            top: -150px;
+            left: -100px;
+            animation-delay: 0s;
+            animation-duration: 28s;
+        }
+        .bg-glow-2 {
+            width: 450px;
+            height: 450px;
+            background: rgba(6, 182, 212, 0.11);
+            bottom: -120px;
+            right: -80px;
+            animation-delay: 4s;
+            animation-duration: 30s;
+        }
+        .bg-glow-3 {
+            width: 350px;
+            height: 350px;
+            background: rgba(245, 158, 11, 0.07);
+            top: 40%;
+            left: 60%;
+            animation-delay: 8s;
+            animation-duration: 32s;
+        }
+        .bg-glow-4 {
+            width: 300px;
+            height: 300px;
+            background: rgba(236, 72, 153, 0.07);
+            top: 20%;
+            right: 20%;
+            animation-delay: 12s;
+            animation-duration: 26s;
+        }
+
+        @keyframes floatGlow {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            20% { transform: translate(15px, -20px) scale(1.03); }
+            40% { transform: translate(-10px, 12px) scale(0.98); }
+            60% { transform: translate(8px, 18px) scale(1.02); }
+            80% { transform: translate(-5px, -15px) scale(0.99); }
+        }
+
+        /* ============ 主容器 ============ */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ============ 导航栏（重设计） ============ */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(12, 12, 26, 0.75);
+            backdrop-filter: blur(28px) saturate(180%);
+            -webkit-backdrop-filter: blur(28px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 10px 0;
+            transition: var(--transition);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+        }
+
+        .navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 28px;
+        }
+
+        .navbar .logo {
+            font-weight: 800;
+            font-size: 1.35rem;
+            letter-spacing: -0.5px;
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .navbar .logo-icon {
+            font-size: 1.4rem;
+            -webkit-text-fill-color: initial;
+            background: none;
+            color: #a78bfa;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.15); }
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            gap: 6px;
+            list-style: none;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .navbar .nav-links a {
+            position: relative;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 8px 14px;
+            border-radius: 8px;
+            transition: all 0.25s ease;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .navbar .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--gradient-main);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .navbar .nav-links a:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .navbar .nav-links a:hover::after {
+            width: 60%;
+        }
+
+        /* ============ Hero 区域 ============ */
+        .hero {
+            padding: 80px 0 60px;
+            text-align: center;
+        }
+        .hero .badge {
+            display: inline-block;
+            background: rgba(124, 58, 237, 0.15);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            color: #c4b5fd;
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            animation: fadeInDown 0.8s ease;
+        }
+        .hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 800;
+            letter-spacing: -2px;
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            animation: fadeInUp 0.8s ease;
+        }
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 560px;
+            margin: 0 auto 36px;
+            animation: fadeInUp 0.8s ease 0.15s both;
+        }
+
+        .countdown-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+        .countdown-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            min-width: 90px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: var(--transition);
+        }
+        .countdown-item:hover {
+            background: var(--card-hover);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+        .countdown-item .number {
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+            display: block;
+        }
+        .countdown-item .label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 500;
+        }
+        .countdown-separator {
+            font-size: 2.4rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            align-self: center;
+            opacity: 0.5;
+        }
+
+        /* ============ Section 通用 ============ */
+        section {
+            padding: 50px 0;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .section-header h2 {
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+        .section-header .section-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .section-header .accent-line {
+            width: 48px;
+            height: 3px;
+            background: var(--gradient-main);
+            border-radius: 99px;
+            margin: 12px auto 0;
+        }
+
+        /* ============ 卡片通用 ============ */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: var(--transition);
+            box-shadow: var(--shadow-card);
+        }
+        .card:hover {
+            background: var(--card-hover);
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.18);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* ============ 准备清单 ============ */
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border-radius: var(--radius-sm);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            cursor: pointer;
+            transition: var(--transition);
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .checklist-item:hover {
+            background: var(--card-hover);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .checklist-item.checked {
+            opacity: 0.55;
+            border-color: rgba(6, 182, 212, 0.3);
+            background: rgba(6, 182, 212, 0.08);
+        }
+        .checklist-item.checked .check-text {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+        .checklist-item .checkbox {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            border: 2px solid var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: var(--transition);
+            font-size: 0.75rem;
+            color: transparent;
+        }
+        .checklist-item.checked .checkbox {
+            background: var(--gradient-main);
+            border-color: transparent;
+            color: #fff;
+        }
+        .checklist-item .check-text {
+            font-size: 0.92rem;
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+        .checklist-item .check-tag {
+            margin-left: auto;
+            font-size: 0.68rem;
+            padding: 3px 10px;
+            border-radius: 99px;
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-muted);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-bar-wrapper {
+            margin-top: 16px;
+        }
+        .progress-bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+        .progress-bar .fill {
+            height: 100%;
+            background: var(--gradient-main);
+            border-radius: 99px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%;
+        }
+
+        /* ============ 目标设定 ============ */
+        .goal-input-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .goal-input-row input {
+            flex: 1;
+            min-width: 200px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-family: var(--font-sans);
+            outline: none;
+            transition: var(--transition);
+        }
+        .goal-input-row input::placeholder {
+            color: var(--text-muted);
+        }
+        .goal-input-row input:focus {
+            border-color: var(--accent-1);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+        }
+        .goal-input-row select {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-family: var(--font-sans);
+            outline: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .goal-input-row select:focus {
+            border-color: var(--accent-1);
+        }
+        .goal-input-row select option {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            transition: var(--transition);
+            letter-spacing: 0.3px;
+        }
+        .btn-primary {
+            background: var(--gradient-main);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(124, 58, 237, 0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(124, 58, 237, 0.45);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 8px 14px;
+            font-size: 0.8rem;
+        }
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.25);
+        }
+
+        .goal-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .goal-list li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            border-radius: var(--radius-sm);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            transition: var(--transition);
+            animation: slideIn 0.3s ease;
+        }
+        .goal-list li:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .goal-list .goal-text {
+            font-size: 0.92rem;
+            color: var(--text-primary);
+        }
+        .goal-list .goal-category {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 99px;
+            margin-left: 10px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+        .goal-category.study {
+            background: rgba(124, 58, 237, 0.18);
+            color: #c4b5fd;
+        }
+        .goal-category.life {
+            background: rgba(6, 182, 212, 0.18);
+            color: #67e8f9;
+        }
+        .goal-category.social {
+            background: rgba(245, 158, 11, 0.18);
+            color: #fcd34d;
+        }
+        .goal-category.health {
+            background: rgba(236, 72, 153, 0.18);
+            color: #f9a8d4;
+        }
+        .empty-message {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 30px;
+            font-size: 0.9rem;
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+        }
+
+        /* ============ 小测试 ============ */
+        .quiz-container {
+            max-width: 680px;
+            margin: 0 auto;
+        }
+        .quiz-question {
+            margin-bottom: 28px;
+            animation: fadeInUp 0.5s ease;
+        }
+        .quiz-question .q-text {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 14px;
+            color: var(--text-primary);
+        }
+        .quiz-question .q-number {
+            display: inline-block;
+            background: var(--gradient-main);
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-right: 10px;
+        }
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .quiz-option {
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--card-border);
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            text-align: left;
+            font-family: var(--font-sans);
+        }
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+        }
+        .quiz-option.selected {
+            background: rgba(124, 58, 237, 0.15);
+            border-color: rgba(124, 58, 237, 0.4);
+            color: #c4b5fd;
+            font-weight: 500;
+        }
+        .quiz-result {
+            margin-top: 24px;
+            padding: 24px;
+            border-radius: var(--radius-md);
+            background: rgba(6, 182, 212, 0.08);
+            border: 1px solid rgba(6, 182, 212, 0.25);
+            text-align: center;
+            animation: fadeInUp 0.5s ease;
+            display: none;
+        }
+        .quiz-result.show {
+            display: block;
+        }
+        .quiz-result h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #67e8f9;
+        }
+        .quiz-result p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* ============ 开学幸运签 ============ */
+        .fortune-container {
+            max-width: 520px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .fortune-box {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            padding: 32px 24px;
+            backdrop-filter: blur(12px);
+            margin-bottom: 20px;
+            transition: var(--transition);
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .fortune-box .fortune-level {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+        .fortune-box .fortune-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1.4;
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+        .fortune-box .fortune-advice {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .fortune-stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        /* ============ 趣味任务卡 ============ */
+        .task-card-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .task-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            padding: 28px 24px;
+            backdrop-filter: blur(12px);
+            text-align: center;
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+        .task-card .task-date {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+        .task-card .task-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .task-card .task-reward {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.04);
+            padding: 8px 16px;
+            border-radius: 99px;
+            display: inline-block;
+        }
+        .task-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .task-completed {
+            opacity: 0.6;
+        }
+        .task-completed .task-text {
+            text-decoration: line-through;
+        }
+
+        /* ============ 开学求生指南 (幽默版时间管理) ============ */
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+        .tip-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md);
+            padding: 22px;
+            transition: var(--transition);
+            backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+        }
+        .tip-card:hover {
+            background: var(--card-hover);
+            transform: translateY(-4px);
+        }
+        .tip-card .tip-icon {
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .tip-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        .tip-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* ============ 学习资源 ============ */
+        .resources-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 14px;
+            list-style: none;
+        }
+        .resources-list li {
+            padding: 16px 20px;
+            border-radius: var(--radius-sm);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .resources-list li:hover {
+            background: var(--card-hover);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+        }
+        .resources-list .res-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            background: var(--gradient-main);
+        }
+
+        /* ============ 每日一句 ============ */
+        .quote-box {
+            text-align: center;
+            padding: 40px 24px;
+            border-radius: var(--radius-lg);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+        }
+        .quote-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(124, 58, 237, 0.04), transparent, rgba(6, 182, 212, 0.04), transparent);
+            animation: rotateGlow 25s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .quote-box .quote-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+            letter-spacing: -0.3px;
+        }
+        .quote-box .quote-author {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            position: relative;
+            z-index: 1;
+        }
+        .quote-box .btn {
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============ 页脚 ============ */
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+        footer a:hover {
+            color: var(--text-primary);
+        }
+
+        /* ============ 动画 ============ */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-12px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============ 响应式 ============ */
+        @media (max-width: 768px) {
+            .navbar .container {
+                flex-direction: column;
+                padding: 0 16px;
             }
-            .bg-canvas canvas {
-                width: 100%;
-                height: 100%;
+            .navbar .logo {
+                font-size: 1.2rem;
             }
-            .content-wrapper {
-                position: relative;
-                z-index: 1;
+            .navbar .nav-links {
+                gap: 4px;
+                justify-content: center;
             }
+            .navbar .nav-links a {
+                font-size: 0.78rem;
+                padding: 6px 10px;
+            }
+            .hero { padding: 50px 0 40px; }
+            .countdown-wrapper { gap: 10px; }
+            .countdown-item { padding: 14px 16px; min-width: 70px; }
+            .countdown-item .number { font-size: 1.8rem; }
+            .countdown-separator { font-size: 1.8rem; }
+            section { padding: 35px 0; }
+            .goal-input-row { flex-direction: column; }
+            .goal-input-row input, .goal-input-row select { width: 100%; }
+            .tips-grid { grid-template-columns: 1fr; }
+            .resources-list { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0 16px; }
+            .hero h1 { font-size: 2rem; letter-spacing: -1px; }
+            .countdown-item .number { font-size: 1.5rem; }
+            .countdown-item { padding: 10px 12px; min-width: 60px; }
+            .countdown-item .label { font-size: 0.65rem; letter-spacing: 0.8px; }
         }
     </style>
 </head>
-<body class="bg-dark text-white font-sans antialiased overflow-x-hidden">
-    <!-- 动态粒子网格背景 -->
-    <div class="bg-canvas">
-        <canvas id="bg-canvas"></canvas>
-    </div>
+<body>
 
-    <div class="content-wrapper">
-        <!-- 顶部导航 -->
-        <nav class="sticky top-0 z-50 glass border-b border-white/5">
-            <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-                <div class="text-lg font-semibold gradient-text">暑假收尾避难所</div>
-                <div class="hidden md:flex gap-8 text-sm text-muted">
-                    <a href="#fortune" class="hover:text-white transition-colors">今日运势</a>
-                    <a href="#skills" class="hover:text-white transition-colors">摸鱼技巧</a>
-                    <a href="#things" class="hover:text-white transition-colors">摸鱼清单</a>
-                    <a href="#facts" class="hover:text-white transition-colors">冷知识</a>
-                </div>
-                <div class="text-xs px-3 py-1.5 rounded-full bg-white/5 text-muted font-mono" id="time-display">
-                    --:--:--
-                </div>
-            </div>
-        </nav>
+    <!-- ============ 动态粒子 Canvas ============ -->
+    <canvas id="particle-canvas"></canvas>
 
-        <!-- 首屏 -->
-        <header class="relative max-w-6xl mx-auto px-6 pt-28 pb-32 text-center">
-            <div class="opacity-0 fade-up">
-                <div class="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-muted mb-8">
-                    暑假末期学生党专属摸鱼基地
-                </div>
+    <!-- ============ 浮动光晕 ============ -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+    <div class="bg-glow bg-glow-4"></div>
+
+    <!-- ============ 导航栏 ============ -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">✦</span>
+                开学季 · 2026
             </div>
-            <h1 class="text-5xl md:text-7xl font-bold mb-6 opacity-0 fade-up delay-100">
-                <span class="gradient-text glow-text">暑假余额不足</span>
-                <br>
-                <span class="text-white/90">先歇五分钟再赶作业</span>
-            </h1>
-            <p class="text-lg text-muted max-w-xl mx-auto leading-relaxed opacity-0 fade-up delay-200">
-                作业写不完也没关系，大脑总得喘口气。<br>
-                开学还早，先摸会儿鱼再说。<br>
-                在家摸鱼，小心爸妈查房。
+            <ul class="nav-links">
+                <li><a href="#checklist">准备清单</a></li>
+                <li><a href="#goals">目标设定</a></li>
+                <li><a href="#quiz">状态测试</a></li>
+                <li><a href="#fortune">幸运签</a></li>
+                <li><a href="#task">趣味任务</a></li>
+                <li><a href="#tips">求生指南</a></li>
+                <li><a href="#resources">学习资源</a></li>
+                <li><a href="#quote">每日一句</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ============ Hero 区域 ============ -->
+    <header class="hero">
+        <div class="container">
+            <div class="badge">新学期倒计时 · 准备好了吗</div>
+            <h1>新学期，从心出发</h1>
+            <p class="subtitle">
+                开学不是终点，而是一段全新旅程的起点。整理行囊、设定方向，
+                带着好奇与勇气，迎接属于你的新篇章。
             </p>
-            <div class="mt-12 flex flex-wrap justify-center gap-4 opacity-0 fade-up delay-300">
-                <button onclick="randomFortune()" class="px-7 py-3.5 rounded-full bg-gradient-to-r from-accent to-neon text-white font-medium hover:opacity-90 transition-all shadow-lg shadow-accent/20">
-                    抽今日赶作业运势
-                </button>
-                <button onclick="randomThing()" class="px-7 py-3.5 rounded-full bg-white/5 border border-white/10 text-white font-medium hover:bg-white/10 transition-all">
-                    随机一件摸鱼小事
-                </button>
+            <div class="countdown-wrapper" id="countdown">
+                <!-- 由 JS 动态生成 -->
             </div>
-        </header>
+        </div>
+    </header>
 
-        <!-- 今日运势板块 -->
-        <section id="fortune" class="relative max-w-6xl mx-auto px-6 py-20">
-            <div class="flex items-end justify-between mb-10">
-                <div>
-                    <h2 class="text-2xl font-bold">今日赶作业摸鱼运势</h2>
-                    <p class="text-muted text-sm mt-1">点一下卡片，看看今天是什么水平</p>
-                </div>
-                <span class="text-xs text-muted">每日刷新 · 纯图一乐</span>
+    <!-- ============ 准备清单 ============ -->
+    <section id="checklist">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>开学准备清单</h2>
+                <p class="section-desc">逐项打勾，确保万无一失。进度会自动保存。</p>
+                <div class="accent-line"></div>
             </div>
-            
-            <div class="grid md:grid-cols-3 gap-5">
-                <div class="glass rounded-2xl p-7 card-hover cursor-pointer" onclick="revealFortune(this, 'lucky')">
-                    <div class="text-3xl mb-4">🍀</div>
-                    <h3 class="font-medium text-lg mb-1">幸运指数</h3>
-                    <p class="text-sm text-muted fortune-text">点击翻开</p>
+            <div class="checklist-grid reveal" id="checklist-grid">
+                <!-- 由 JS 动态生成 -->
+            </div>
+            <div class="progress-bar-wrapper reveal">
+                <div class="progress-bar-label">
+                    <span>完成进度</span>
+                    <span id="progress-percent">0%</span>
                 </div>
-                <div class="glass rounded-2xl p-7 card-hover cursor-pointer" onclick="revealFortune(this, 'danger')">
-                    <div class="text-3xl mb-4">⚠️</div>
-                    <h3 class="font-medium text-lg mb-1">爸妈查房风险</h3>
-                    <p class="text-sm text-muted fortune-text">点击翻开</p>
-                </div>
-                <div class="glass rounded-2xl p-7 card-hover cursor-pointer" onclick="revealFortune(this, 'suggest')">
-                    <div class="text-3xl mb-4">💡</div>
-                    <h3 class="font-medium text-lg mb-1">最佳摸鱼姿势</h3>
-                    <p class="text-sm text-muted fortune-text">点击翻开</p>
+                <div class="progress-bar">
+                    <div class="fill" id="progress-fill"></div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div id="fortune-result" class="mt-10 glass rounded-2xl p-8 text-center hidden">
-                <p class="text-xl font-medium gradient-text" id="fortune-main-text"></p>
-                <p class="text-sm text-muted mt-2" id="fortune-sub-text"></p>
+    <!-- ============ 目标设定 ============ -->
+    <section id="goals">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>新学期目标</h2>
+                <p class="section-desc">写下你想在新学期实现的事情，让目标看得见。</p>
+                <div class="accent-line"></div>
             </div>
-        </section>
-
-        <!-- 在家摸鱼技巧 -->
-        <section id="skills" class="relative py-20">
-            <div class="max-w-6xl mx-auto px-6">
-                <div class="mb-10">
-                    <h2 class="text-2xl font-bold">在家摸鱼生存指南</h2>
-                    <p class="text-muted text-sm mt-1">亲测有用，被抓不赔</p>
+            <div class="reveal">
+                <div class="goal-input-row">
+                    <input type="text" id="goal-input" placeholder="例如：每天背20个单词" maxlength="60">
+                    <select id="goal-category">
+                        <option value="study">学习</option>
+                        <option value="life">生活</option>
+                        <option value="social">社交</option>
+                        <option value="health">健康</option>
+                    </select>
+                    <button class="btn btn-primary" id="goal-add-btn">添加目标</button>
                 </div>
+                <ul class="goal-list" id="goal-list"></ul>
+            </div>
+        </div>
+    </section>
 
-                <div class="grid md:grid-cols-2 gap-5">
-                    <div class="glass rounded-2xl p-6 card-hover">
-                        <div class="flex gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center text-lg shrink-0">📚</div>
-                            <div>
-                                <h3 class="font-medium mb-2">书桌上永远摊开作业</h3>
-                                <p class="text-sm text-muted leading-relaxed">
-                                    不管你在玩什么，桌面上必须摊着作业本和笔。爸妈突然推门进来，
-                                    手机往书底下一塞，低头假装写题，表情要凝重，像在思考很难的题。
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+    <!-- ============ 开学状态小测试 ============ -->
+    <section id="quiz">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>开学状态自测</h2>
+                <p class="section-desc">选完所有题目，看看你的"开学状态指数"如何。</p>
+                <div class="accent-line"></div>
+            </div>
+            <div class="quiz-container reveal" id="quiz-container">
+                <!-- 由 JS 动态生成 -->
+            </div>
+            <div class="quiz-result" id="quiz-result">
+                <h3 id="quiz-result-title"></h3>
+                <p id="quiz-result-text"></p>
+            </div>
+        </div>
+    </section>
 
-                    <div class="glass rounded-2xl p-6 card-hover">
-                        <div class="flex gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-neon/20 flex items-center justify-center text-lg shrink-0">👂</div>
-                            <div>
-                                <h3 class="font-medium mb-2">练好听声辨位</h3>
-                                <p class="text-sm text-muted leading-relaxed">
-                                    耳朵竖起来，听脚步声。爸妈从客厅走过来的声音、开门的声音，
-                                    提前两秒就能切回学习界面。高手都是面不改色，心跳都不加速。
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="glass rounded-2xl p-6 card-hover">
-                        <div class="flex gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-pink/20 flex items-center justify-center text-lg shrink-0">🚶</div>
-                            <div>
-                                <h3 class="font-medium mb-2">多去喝水、上厕所、拿东西</h3>
-                                <p class="text-sm text-muted leading-relaxed">
-                                    物理移动是最正当的摸鱼。一趟来回三分钟，
-                                    冰箱旁边站会儿，窗边看会儿天，再慢悠悠走回去。
-                                    别跑，越慢越像正经事。
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="glass rounded-2xl p-6 card-hover">
-                        <div class="flex gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-lg shrink-0">✏️</div>
-                            <div>
-                                <h3 class="font-medium mb-2">手里的笔别停</h3>
-                                <p class="text-sm text-muted leading-relaxed">
-                                    哪怕在草稿纸上瞎画圈圈，手也别停。
-                                    爸妈路过门口看一眼，只会觉得你在认真演算。
-                                    重点是别笑，一笑就全露馅了。
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+    <!-- ============ 开学幸运签 ============ -->
+    <section id="fortune">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>开学幸运签</h2>
+                <p class="section-desc">抽一支签，给新学期讨个好彩头。</p>
+                <div class="accent-line"></div>
+            </div>
+            <div class="fortune-container reveal">
+                <div class="fortune-box" id="fortune-box">
+                    <div class="fortune-level" id="fortune-level">点击下方按钮抽签</div>
+                    <div class="fortune-text" id="fortune-text">✨</div>
+                    <div class="fortune-advice" id="fortune-advice">新学期的好运，等你来开启</div>
+                </div>
+                <button class="btn btn-primary" id="fortune-btn">抽一支幸运签</button>
+                <div class="fortune-stats">
+                    <span>今日已抽 <span id="fortune-count">0</span> 次</span>
+                    <span>|</span>
+                    <span>累计好运 <span id="fortune-total">0</span></span>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- 摸鱼小事清单 -->
-        <section id="things" class="relative max-w-6xl mx-auto px-6 py-20">
-            <div class="mb-10">
-                <h2 class="text-2xl font-bold">写作业写烦了可以做的小事</h2>
-                <p class="text-muted text-sm mt-1">不用动脑，做完还挺有成就感</p>
+    <!-- ============ 趣味任务卡 ============ -->
+    <section id="task">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>趣味任务卡</h2>
+                <p class="section-desc">每天一个轻松小任务，让开学季更有趣。</p>
+                <div class="accent-line"></div>
             </div>
-
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="glass rounded-xl p-5 card-hover text-center">
-                    <div class="text-2xl mb-2">🖊️</div>
-                    <p class="text-sm">转笔十圈不落地</p>
+            <div class="task-card-container reveal">
+                <div class="task-card" id="task-card">
+                    <div class="task-date" id="task-date">今日任务</div>
+                    <div class="task-text" id="task-text">给同桌一个真诚的微笑，并说"新学期一起加油"</div>
+                    <div class="task-reward" id="task-reward">✨ 奖励：心情+1，友情+1</div>
                 </div>
-                <div class="glass rounded-xl p-5 card-hover text-center">
-                    <div class="text-2xl mb-2">📝</div>
-                    <p class="text-sm">草稿纸瞎画小人</p>
-                </div>
-                <div class="glass rounded-xl p-5 card-hover text-center">
-                    <div class="text-2xl mb-2">🧹</div>
-                    <p class="text-sm">整理一遍笔袋</p>
-                </div>
-                <div class="glass rounded-xl p-5 card-hover text-center">
-                    <div class="text-2xl mb-2">📚</div>
-                    <p class="text-sm">按颜色排课本</p>
-                </div>
-                <div class="glass rounded-xl p-5 card-hover text-center">
-                    <div class="text-2xl mb-2">🧃</div>
-                    <p class="text-sm">去冰箱翻零食</p>
-                </div>
-                <div class="glass rounded-xl p-5 card-hover text-center">
-                    <div class="text-2xl mb-2">🖐️</div>
-                    <p class="text-sm">掰手指听响</p>
-                </div>
-                <div class="glass rounded-xl p-5 card-hover text-center">
-                    <div class="text-2xl mb-2">🪟</div>
-                    <p class="text-sm">窗边发会儿呆</p>
-                </div>
-                <div class="glass rounded-xl p-5 card-hover text-center">
-                    <div class="text-2xl mb-2">💭</div>
-                    <p class="text-sm">脑补开学剧情</p>
+                <div class="task-actions">
+                    <button class="btn btn-primary" id="task-refresh-btn">换一个任务</button>
+                    <button class="btn" id="task-complete-btn" style="background:rgba(6,182,212,0.15);color:#67e8f9;border:1px solid rgba(6,182,212,0.3);">标记完成</button>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="mt-10 text-center">
-                <button onclick="randomThing()" class="px-6 py-3 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition-all">
-                    随机挑一件做
-                </button>
-                <p id="random-thing-result" class="mt-4 text-muted h-6"></p>
+    <!-- ============ 开学求生指南 (幽默版时间管理) ============ -->
+    <section id="tips">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>开学求生指南</h2>
+                <p class="section-desc">轻松应对新学期，不焦虑、不慌张。</p>
+                <div class="accent-line"></div>
             </div>
-        </section>
-
-        <!-- 冷知识 -->
-        <section id="facts" class="relative py-20">
-            <div class="max-w-6xl mx-auto px-6">
-                <div class="mb-10">
-                    <h2 class="text-2xl font-bold">没什么用的冷知识</h2>
-                    <p class="text-muted text-sm mt-1">记下来，开学聊天能用得上</p>
+            <div class="tips-grid reveal">
+                <div class="tip-card">
+                    <span class="tip-icon">🍅</span>
+                    <h4>番茄工作法（防拖延版）</h4>
+                    <p>25分钟专注 + 5分钟休息。别担心，休息时可以刷手机，但记得回来。效率就像番茄，红红火火。</p>
                 </div>
-
-                <div class="grid md:grid-cols-2 gap-5">
-                    <div class="glass rounded-2xl p-6 card-hover">
-                        <span class="text-xs px-2.5 py-1 rounded-full bg-accent/20 text-accent">人体冷知识</span>
-                        <h3 class="font-medium mt-4 mb-2">你舔不到自己的手肘</h3>
-                        <p class="text-sm text-muted">
-                            百分之九十的人看到这句话都会偷偷试一下，
-                            试完还会装作什么都没发生继续往下看。
-                        </p>
-                    </div>
-
-                    <div class="glass rounded-2xl p-6 card-hover">
-                        <span class="text-xs px-2.5 py-1 rounded-full bg-neon/20 text-neon">动物冷知识</span>
-                        <h3 class="font-medium mt-4 mb-2">海獭睡觉手牵手</h3>
-                        <p class="text-sm text-muted">
-                            不是浪漫，是怕睡着漂走了。
-                            找不到同伴就抱海藻，主打一个安全感。
-                        </p>
-                    </div>
-
-                    <div class="glass rounded-2xl p-6 card-hover">
-                        <span class="text-xs px-2.5 py-1 rounded-full bg-pink/20 text-pink">学习冷知识</span>
-                        <h3 class="font-medium mt-4 mb-2"> deadline 前效率真的会变高</h3>
-                        <p class="text-sm text-muted">
-                            压力会让大脑分泌肾上腺素，短时间内注意力更集中。
-                            所以暑假最后几天赶作业特别快，不是错觉，是生理反应。
-                        </p>
-                    </div>
-
-                    <div class="glass rounded-2xl p-6 card-hover">
-                        <span class="text-xs px-2.5 py-1 rounded-full bg-white/10 text-white/70">生活冷知识</span>
-                        <h3 class="font-medium mt-4 mb-2">打火机比火柴发明得早</h3>
-                        <p class="text-sm text-muted">
-                            打火机 1823 年就有了，现代安全火柴到 1855 年才发明。
-                            很多人都搞反了。
-                        </p>
-                    </div>
+                <div class="tip-card">
+                    <span class="tip-icon">📦</span>
+                    <h4>时间块规划</h4>
+                    <p>把一天切成块，每块只做一件事。上课、作业、运动、发呆各归其位，不互相干扰。发呆也是重要的时间块。</p>
+                </div>
+                <div class="tip-card">
+                    <span class="tip-icon">🎯</span>
+                    <h4>优先级矩阵（简单版）</h4>
+                    <p>先做重要且紧急的，再做重要不紧急的。至于不重要的？留到明天吧，明天也许就不重要了。</p>
+                </div>
+                <div class="tip-card">
+                    <span class="tip-icon">🔁</span>
+                    <h4>周计划复盘</h4>
+                    <p>每周日花15分钟回顾：这周学了啥？忘了啥？下周重点补啥？持续迭代，你会感谢自己的。</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- 底部 -->
-        <footer class="relative py-16 text-center text-muted text-sm border-t border-white/5">
-            <p class="text-white/80 font-medium mb-2">摸鱼不是偷懒，是为了更好地赶作业。</p>
-            <p class="text-xs">本站不鼓励整个暑假都摸鱼，最后几天加油。</p>
-            <p class="mt-10 text-xs opacity-50">© 暑假收尾避难所 · 写累了就回来歇会儿</p>
-        </footer>
+    <!-- ============ 学习资源推荐 ============ -->
+    <section id="resources">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>学习资源推荐</h2>
+                <p class="section-desc">好工具让你事半功倍，这些资源值得一试。</p>
+                <div class="accent-line"></div>
+            </div>
+            <ul class="resources-list reveal">
+                <li><span class="res-dot"></span>Khan Academy — 免费全科学习，视频讲解清晰得像邻家学长</li>
+                <li><span class="res-dot"></span>Anki — 间隔重复背单词，记忆曲线比你更懂你</li>
+                <li><span class="res-dot"></span>Notion — 全能笔记与任务管理，打造你的学习知识库</li>
+                <li><span class="res-dot"></span>Forest — 专注种树，放下手机，让专注长成一片森林</li>
+                <li><span class="res-dot"></span>Wolfram Alpha — 数学科学问题，它能帮你算到小数点后好多位</li>
+                <li><span class="res-dot"></span>Grammarly — 英文写作助手，帮你把语法错误揪出来</li>
+                <li><span class="res-dot"></span>Bilibili 知识区 — 学习视频也可以很有趣，宝藏UP主等你发现</li>
+                <li><span class="res-dot"></span>微信读书 — 课间也能读几页，积累就在碎片时间</li>
+            </ul>
+        </div>
+    </section>
 
-        <!-- 回到顶部按钮 -->
-        <button id="back-top" onclick="window.scrollTo({top:0, behavior:'smooth'})" 
-            class="fixed bottom-8 right-8 w-12 h-12 rounded-full glass flex items-center justify-center opacity-0 transition-all duration-300 pointer-events-none hover:bg-white/10 z-50">
-            ↑
-        </button>
-    </div>
+    <!-- ============ 每日一句 ============ -->
+    <section id="quote">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>每日一句</h2>
+                <p class="section-desc">给自己一点鼓励，然后继续前行。</p>
+                <div class="accent-line"></div>
+            </div>
+            <div class="quote-box reveal">
+                <p class="quote-text" id="quote-text">学如逆水行舟，不进则退。</p>
+                <p class="quote-author" id="quote-author">— 古人云</p>
+                <button class="btn btn-primary" id="quote-btn">换一句</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 页脚 ============ -->
+    <footer>
+        <div class="container">
+            <p>新学期 · 新开始 &nbsp;|&nbsp; 愿你带着热爱，奔赴下一场山海 &nbsp;|&nbsp; 2026 开学季</p>
+        </div>
+    </footer>
 
     <script>
-        // ========== 动态粒子网格背景 ==========
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        let w, h;
-        let particles = [];
-        let gridOffset = 0;
+        // =========================================
+        // 1. Canvas 粒子动态背景（慢速版）
+        // =========================================
+        (function initParticles() {
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+            let mouse = { x: null, y: null, radius: 140 };
+            const PARTICLE_COUNT = 90;
+            const COLORS = ['#7c3aed', '#06b6d4', '#a78bfa', '#22d3ee', '#f59e0b', '#ec4899'];
 
-        function resize() {
-            w = canvas.width = window.innerWidth;
-            h = canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * w;
-                this.y = Math.random() * h;
-                this.vx = (Math.random() - 0.5) * 0.4;
-                this.vy = (Math.random() - 0.5) * 0.4;
-                this.r = Math.random() * 2 + 1;
-                this.opacity = Math.random() * 0.4 + 0.1;
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
             }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.x < 0 || this.x > w) this.vx *= -1;
-                if (this.y < 0 || this.y > h) this.vy *= -1;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(124, 92, 255, ${this.opacity})`;
-                ctx.fill();
-            }
-        }
 
-        for (let i = 0; i < 80; i++) {
-            particles.push(new Particle());
-        }
-
-        function drawGrid() {
-            const gridSize = 50;
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
-            ctx.lineWidth = 1;
-            for (let x = -gridOffset; x < w; x += gridSize) {
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, h);
-                ctx.stroke();
+            function createParticle(existing) {
+                const p = existing || {};
+                p.x = p.x !== undefined && p.x > 0 && p.x < width ? p.x : Math.random() * width;
+                p.y = p.y !== undefined && p.y > 0 && p.y < height ? p.y : Math.random() * height;
+                p.vx = (Math.random() - 0.5) * 0.25;
+                p.vy = (Math.random() - 0.5) * 0.25;
+                p.radius = Math.random() * 2.0 + 0.8;
+                p.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+                p.opacity = Math.random() * 0.5 + 0.15;
+                p.pulseSpeed = Math.random() * 0.008 + 0.002;
+                p.pulseOffset = Math.random() * Math.PI * 2;
+                return p;
             }
-            for (let y = -gridOffset; y < h; y += gridSize) {
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(w, y);
-                ctx.stroke();
+
+            function init() {
+                resize();
+                particles = [];
+                for (let i = 0; i < PARTICLE_COUNT; i++) {
+                    particles.push(createParticle());
+                }
             }
-            gridOffset = (gridOffset + 0.15) % gridSize;
-        }
 
-        function animate() {
-            ctx.clearRect(0, 0, w, h);
-            // 背景柔光
-            const gradient = ctx.createRadialGradient(w * 0.2, h * 0.2, 0, w * 0.2, h * 0.2, w * 0.6);
-            gradient.addColorStop(0, 'rgba(124, 92, 255, 0.08)');
-            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, w, h);
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
 
-            drawGrid();
-            particles.forEach(p => {
-                p.update();
-                p.draw();
+                for (const p of particles) {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.opacity = 0.3 + Math.sin(Date.now() * p.pulseSpeed + p.pulseOffset) * 0.15;
+
+                    if (p.x < -10) p.x = width + 10;
+                    if (p.x > width + 10) p.x = -10;
+                    if (p.y < -10) p.y = height + 10;
+                    if (p.y > height + 10) p.y = -10;
+
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const dx = p.x - mouse.x;
+                        const dy = p.y - mouse.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < mouse.radius && dist > 0) {
+                            const force = (mouse.radius - dist) / mouse.radius * 0.12;
+                            p.vx += (dx / dist) * force * 0.4;
+                            p.vy += (dy / dist) * force * 0.4;
+                            const maxSpeed = 0.8;
+                            const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+                            if (speed > maxSpeed) {
+                                p.vx = (p.vx / speed) * maxSpeed;
+                                p.vy = (p.vy / speed) * maxSpeed;
+                            }
+                        }
+                    }
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = p.opacity;
+                    ctx.fill();
+                }
+
+                ctx.globalAlpha = 1;
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        const maxDist = 100;
+                        if (dist < maxDist) {
+                            const alpha = (1 - dist / maxDist) * 0.2;
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(160, 140, 220, ${alpha})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                if (mouse.x !== null && mouse.y !== null) {
+                    for (const p of particles) {
+                        const dx = p.x - mouse.x;
+                        const dy = p.y - mouse.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < mouse.radius) {
+                            const alpha = (1 - dist / mouse.radius) * 0.2;
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(mouse.x, mouse.y);
+                            ctx.strokeStyle = `rgba(150, 180, 240, ${alpha})`;
+                            ctx.lineWidth = 0.4;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                ctx.globalAlpha = 1;
+                requestAnimationFrame(animate);
+            }
+
+            window.addEventListener('mousemove', (e) => {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
             });
-            requestAnimationFrame(animate);
-        }
-        animate();
-
-        // ========== 页面交互 ==========
-        // 顶部时间显示
-        function updateTime() {
-            const now = new Date();
-            const h = now.getHours().toString().padStart(2, '0');
-            const m = now.getMinutes().toString().padStart(2, '0');
-            const s = now.getSeconds().toString().padStart(2, '0');
-            document.getElementById('time-display').textContent = `今日摸鱼进度 ${h}:${m}:${s}`;
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
-
-        // 回到顶部按钮显隐
-        const backTop = document.getElementById('back-top');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 400) {
-                backTop.classList.remove('opacity-0', 'pointer-events-none');
-                backTop.classList.add('opacity-100');
-            } else {
-                backTop.classList.add('opacity-0', 'pointer-events-none');
-                backTop.classList.remove('opacity-100');
-            }
-        });
-
-        // 赶作业运势数据
-        const fortuneData = {
-            lucky: [
-                { main: '幸运值爆表', sub: '爸妈今天出门忙，可以放心大胆摸' },
-                { main: '运气平平', sub: '正常摸鱼，别玩太疯就没事' },
-                { main: '四星好运', sub: '摸久一点也不会被发现，低调点' },
-                { main: '摸鱼运在线', sub: '适合边写边玩，效率反而更高' },
-            ],
-            danger: [
-                { main: '低风险', sub: '爸妈心情不错，抓包了也不会骂太狠' },
-                { main: '中等风险', sub: '注意门口脚步声，别太投入了' },
-                { main: '风险略高', sub: '建议假装认真写作业的样子摸' },
-                { main: '今日不宜', sub: '老老实实写作业吧，改天再战' },
-            ],
-            suggest: [
-                { main: '适合窗边发呆', sub: '看着像在思考题目，实则放空' },
-                { main: '适合偷偷刷手机', sub: '记得用书挡着，音量关最小' },
-                { main: '适合去厨房溜达', sub: '拿瓶水吃点水果，名正言顺' },
-                { main: '适合整理文具', sub: '一边收拾一边摸，没人会说' },
-            ]
-        };
-
-        // 单张翻牌
-        function revealFortune(el, type) {
-            const list = fortuneData[type];
-            const item = list[Math.floor(Math.random() * list.length)];
-            const textEl = el.querySelector('.fortune-text');
-            textEl.textContent = item.main;
-            textEl.classList.remove('text-muted');
-            textEl.classList.add('text-white', 'font-medium');
-        }
-
-        // 一键抽全套运势
-        function randomFortune() {
-            const cards = document.querySelectorAll('.fortune-text');
-            const types = ['lucky', 'danger', 'suggest'];
-            
-            cards.forEach((card, i) => {
-                const list = fortuneData[types[i]];
-                const item = list[Math.floor(Math.random() * list.length)];
-                card.textContent = item.main;
-                card.classList.remove('text-muted');
-                card.classList.add('text-white', 'font-medium');
+            window.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+            window.addEventListener('touchmove', (e) => {
+                if (e.touches.length > 0) {
+                    mouse.x = e.touches[0].clientX;
+                    mouse.y = e.touches[0].clientY;
+                }
+            }, { passive: true });
+            window.addEventListener('touchend', () => {
+                mouse.x = null;
+                mouse.y = null;
             });
 
-            const resultBox = document.getElementById('fortune-result');
-            resultBox.classList.remove('hidden');
-            document.getElementById('fortune-main-text').textContent = '今日鉴定：合格的暑假摸鱼人';
-            document.getElementById('fortune-sub-text').textContent = '记住，摸鱼也要讲究张弛有度。';
-            
-            document.getElementById('fortune').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // 随机摸鱼小事
-        const thingsList = [
-            '转笔转够十圈不落地',
-            '在草稿纸上瞎画十个小人',
-            '把笔袋里的笔按颜色排好',
-            '去冰箱翻一包零食',
-            '站在窗边发三分钟呆',
-            '把十个手指关节都掰响',
-            '整理一遍书桌抽屉',
-            '脑补一下开学的名场面',
-            '用左手写自己的名字',
-            '给橡皮修个形状',
-        ];
-
-        function randomThing() {
-            const thing = thingsList[Math.floor(Math.random() * thingsList.length)];
-            document.getElementById('random-thing-result').textContent = `那就去：${thing}`;
-        }
-
-        // 平滑滚动
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
+            window.addEventListener('resize', () => {
+                const oldWidth = width;
+                const oldHeight = height;
+                resize();
+                for (const p of particles) {
+                    p.x = (p.x / oldWidth) * width;
+                    p.y = (p.y / oldHeight) * height;
                 }
             });
-        });
+
+            init();
+            animate();
+        })();
+
+        // =========================================
+        // 2. 开学倒计时
+        // =========================================
+        (function initCountdown() {
+            const targetDate = new Date('2026-09-01T08:00:00+08:00');
+            const container = document.getElementById('countdown');
+
+            function update() {
+                const now = new Date();
+                const diff = targetDate - now;
+
+                if (diff <= 0) {
+                    container.innerHTML = `
+                        <div class="countdown-item">
+                            <span class="number">开</span>
+                            <span class="label">学啦</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="number">学</span>
+                            <span class="label">加油</span>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                const items = [
+                    { value: days, label: '天' },
+                    { value: hours, label: '小时' },
+                    { value: minutes, label: '分钟' },
+                    { value: seconds, label: '秒' },
+                ];
+
+                container.innerHTML = items.map((item, idx) => {
+                    const numStr = String(item.value).padStart(2, '0');
+                    const separator = idx < items.length - 1 ?
+                        '<span class="countdown-separator">:</span>' : '';
+                    return `
+                        <div class="countdown-item">
+                            <span class="number">${numStr}</span>
+                            <span class="label">${item.label}</span>
+                        </div>
+                        ${separator}
+                    `;
+                }).join('');
+            }
+
+            update();
+            setInterval(update, 1000);
+        })();
+
+        // =========================================
+        // 3. 准备清单（localStorage 持久化）
+        // =========================================
+        (function initChecklist() {
+            const STORAGE_KEY = 'back_to_school_checklist_2026_v2';
+            const defaultItems = [
+                { id: 'bag', text: '整理书包与学习用品', tag: '必备' },
+                { id: 'stationery', text: '补充文具（笔、本、尺规）', tag: '必备' },
+                { id: 'schedule', text: '调整作息，早睡早起', tag: '重要' },
+                { id: 'preview', text: '预习新学期前两章内容', tag: '学习' },
+                { id: 'desk', text: '整理书桌与学习空间', tag: '环境' },
+                { id: 'plan', text: '制定个人学习计划表', tag: '规划' },
+                { id: 'uniform', text: '准备校服或日常衣物', tag: '生活' },
+                { id: 'health', text: '调整饮食，适度运动', tag: '健康' },
+                { id: 'mindset', text: '调整心态，给自己打气', tag: '心理' },
+                { id: 'social', text: '联系同学，聊聊假期收获', tag: '社交' },
+                { id: 'review', text: '复习上学期薄弱知识点', tag: '学习' },
+                { id: 'digital', text: '清理手机/电脑娱乐软件', tag: '自律' },
+                { id: 'fun1', text: '给同桌准备一个小惊喜（比如一张手写卡片）', tag: '趣味' },
+                { id: 'fun2', text: '拍一张开学前的自拍，留作对比', tag: '趣味' },
+                { id: 'fun3', text: '学会一首新歌，准备课间唱给同学听', tag: '趣味' },
+                { id: 'fun4', text: '把暑假最糗的一件事写下来，然后撕掉', tag: '趣味' },
+            ];
+
+            let checkedState = {};
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    checkedState = JSON.parse(saved);
+                }
+            } catch (e) { /* ignore */ }
+
+            const grid = document.getElementById('checklist-grid');
+            const progressFill = document.getElementById('progress-fill');
+            const progressPercent = document.getElementById('progress-percent');
+
+            function render() {
+                grid.innerHTML = defaultItems.map(item => {
+                    const isChecked = checkedState[item.id] || false;
+                    return `
+                        <div class="checklist-item ${isChecked ? 'checked' : ''}" data-id="${item.id}">
+                            <span class="checkbox">✓</span>
+                            <span class="check-text">${item.text}</span>
+                            <span class="check-tag">${item.tag}</span>
+                        </div>
+                    `;
+                }).join('');
+
+                grid.querySelectorAll('.checklist-item').forEach(el => {
+                    el.addEventListener('click', () => {
+                        const id = el.dataset.id;
+                        checkedState[id] = !checkedState[id];
+                        saveAndRender();
+                    });
+                });
+
+                updateProgress();
+            }
+
+            function updateProgress() {
+                const checkedCount = Object.values(checkedState).filter(v => v === true).length;
+                const total = defaultItems.length;
+                const percent = Math.round((checkedCount / total) * 100);
+                progressFill.style.width = percent + '%';
+                progressPercent.textContent = percent + '%';
+            }
+
+            function saveAndRender() {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(checkedState));
+                } catch (e) { /* ignore */ }
+                render();
+            }
+
+            render();
+
+            window.resetChecklist = () => {
+                checkedState = {};
+                saveAndRender();
+            };
+        })();
+
+        // =========================================
+        // 4. 目标设定（localStorage 持久化）
+        // =========================================
+        (function initGoals() {
+            const STORAGE_KEY = 'back_to_school_goals_2026_v2';
+            const input = document.getElementById('goal-input');
+            const categorySelect = document.getElementById('goal-category');
+            const addBtn = document.getElementById('goal-add-btn');
+            const list = document.getElementById('goal-list');
+
+            let goals = [];
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    goals = JSON.parse(saved);
+                }
+            } catch (e) { /* ignore */ }
+
+            const categoryLabels = {
+                study: '学习',
+                life: '生活',
+                social: '社交',
+                health: '健康',
+            };
+
+            function render() {
+                if (goals.length === 0) {
+                    list.innerHTML = `
+                        <div class="empty-message">
+                            还没有目标。试试添加"每天不迟到"或者"交到一个新朋友"这样的小目标吧。
+                        </div>
+                    `;
+                    return;
+                }
+                list.innerHTML = goals.map((goal, index) => {
+                    const label = categoryLabels[goal.category] || goal.category;
+                    return `
+                        <li>
+                            <span class="goal-text">
+                                ${goal.text}
+                                <span class="goal-category ${goal.category}">${label}</span>
+                            </span>
+                            <button class="btn btn-danger" data-index="${index}">删除</button>
+                        </li>
+                    `;
+                }).join('');
+
+                list.querySelectorAll('.btn-danger').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const index = parseInt(btn.dataset.index);
+                        goals.splice(index, 1);
+                        saveAndRender();
+                    });
+                });
+            }
+
+            function saveAndRender() {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(goals));
+                } catch (e) { /* ignore */ }
+                render();
+            }
+
+            addBtn.addEventListener('click', () => {
+                const text = input.value.trim();
+                if (!text) {
+                    input.focus();
+                    input.style.borderColor = '#ef4444';
+                    setTimeout(() => { input.style.borderColor = ''; }, 1500);
+                    return;
+                }
+                if (goals.length >= 25) {
+                    alert('目标数量已达上限（25个），先完成一些再添加吧。');
+                    return;
+                }
+                goals.push({
+                    text: text,
+                    category: categorySelect.value,
+                    createdAt: Date.now(),
+                });
+                input.value = '';
+                input.focus();
+                saveAndRender();
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    addBtn.click();
+                }
+            });
+
+            render();
+        })();
+
+        // =========================================
+        // 5. 开学状态小测试
+        // =========================================
+        (function initQuiz() {
+            const container = document.getElementById('quiz-container');
+            const resultBox = document.getElementById('quiz-result');
+            const resultTitle = document.getElementById('quiz-result-title');
+            const resultText = document.getElementById('quiz-result-text');
+
+            const questions = [{
+                q: '暑假期间，你的起床时间通常是？',
+                options: [
+                    { text: '7点前，保持规律', score: 4 },
+                    { text: '7-9点，还算正常', score: 3 },
+                    { text: '9-11点，有点放飞', score: 2 },
+                    { text: '11点后，完全颠倒', score: 1 },
+                ]
+            }, {
+                q: '暑假作业完成情况如何？',
+                options: [
+                    { text: '全部完成，还预习了新课', score: 4 },
+                    { text: '基本完成，收尾中', score: 3 },
+                    { text: '完成了一半左右', score: 2 },
+                    { text: '还在紧急赶工中', score: 1 },
+                ]
+            }, {
+                q: '想到开学，你的第一反应是？',
+                options: [
+                    { text: '期待！想见到同学和老师', score: 4 },
+                    { text: '平静，顺其自然', score: 3 },
+                    { text: '有点紧张，担心跟不上', score: 2 },
+                    { text: '焦虑，不想面对', score: 1 },
+                ]
+            }, {
+                q: '新学期你最想提升的是？',
+                options: [
+                    { text: '学习成绩，冲进年级前列', score: 4 },
+                    { text: '社交能力，交更多朋友', score: 3 },
+                    { text: '时间管理，告别拖延', score: 4 },
+                    { text: '培养一个兴趣爱好', score: 3 },
+                ]
+            }, {
+                q: '关于新学期计划，你的状态是？',
+                options: [
+                    { text: '已经制定了详细计划', score: 4 },
+                    { text: '大概想了一下方向', score: 3 },
+                    { text: '打算开学后再看', score: 2 },
+                    { text: '完全没有想过', score: 1 },
+                ]
+            }];
+
+            let answers = new Array(questions.length).fill(null);
+
+            function render() {
+                container.innerHTML = questions.map((q, qi) => {
+                    const optionsHtml = q.options.map((opt, oi) => {
+                        const isSelected = answers[qi] === oi;
+                        return `
+                            <button class="quiz-option ${isSelected ? 'selected' : ''}" 
+                                    data-question="${qi}" data-option="${oi}">
+                                ${String.fromCharCode(65 + oi)}. ${opt.text}
+                            </button>
+                        `;
+                    }).join('');
+                    return `
+                        <div class="quiz-question">
+                            <p class="q-text">
+                                <span class="q-number">${qi + 1}</span>${q.q}
+                            </p>
+                            <div class="quiz-options">${optionsHtml}</div>
+                        </div>
+                    `;
+                }).join('');
+
+                container.querySelectorAll('.quiz-option').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const qi = parseInt(btn.dataset.question);
+                        const oi = parseInt(btn.dataset.option);
+                        answers[qi] = oi;
+                        render();
+                        checkAllAnswered();
+                    });
+                });
+            }
+
+            function checkAllAnswered() {
+                if (answers.every(a => a !== null)) {
+                    calculateResult();
+                } else {
+                    resultBox.classList.remove('show');
+                }
+            }
+
+            function calculateResult() {
+                let totalScore = 0;
+                answers.forEach((ans, qi) => {
+                    totalScore += questions[qi].options[ans].score;
+                });
+
+                const maxScore = questions.length * 4;
+                const ratio = totalScore / maxScore;
+
+                let title, text;
+                if (ratio >= 0.8) {
+                    title = '开学状态极佳 — 你已整装待发';
+                    text = '你的准备非常充分，心态积极、计划清晰。保持这份劲头，新学期你一定会大放异彩。记住：优秀是一种习惯，继续保持。';
+                } else if (ratio >= 0.6) {
+                    title = '开学状态良好 — 稍作调整更完美';
+                    text = '你大体上准备好了，但还有一些小细节可以优化。试着把作息再调早一点，或者把计划写得更具体。小改变会带来大不同。';
+                } else if (ratio >= 0.4) {
+                    title = '开学状态一般 — 需要收收心了';
+                    text = '假期模式还没完全切换过来。别慌，从现在开始每天调整一点点：早睡半小时、整理一下书桌、做个简单计划。慢慢来，会好的。';
+                } else {
+                    title = '开学状态待激活 — 是时候行动了';
+                    text = '假期过得太舒服了，一时间难以切换。没关系，给自己一个过渡期，从最微小的事情开始做起。每一个新的开始，都值得被认真对待。';
+                }
+
+                resultTitle.textContent = title;
+                resultText.textContent = text;
+                resultBox.classList.add('show');
+                resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            render();
+
+            const resetBtn = document.createElement('button');
+            resetBtn.className = 'btn';
+            resetBtn.style.cssText =
+                'margin-top:16px;background:rgba(255,255,255,0.06);color:var(--text-secondary);border:1px solid var(--card-border);';
+            resetBtn.textContent = '重新测试';
+            resetBtn.addEventListener('click', () => {
+                answers = new Array(questions.length).fill(null);
+                resultBox.classList.remove('show');
+                render();
+            });
+            resultBox.appendChild(resetBtn);
+        })();
+
+        // =========================================
+        // 6. 开学幸运签
+        // =========================================
+        (function initFortune() {
+            const fortunes = [
+                { level: '上上签', text: '开学即巅峰', advice: '保持自信，你比想象中更厉害。' },
+                { level: '上签', text: '友谊长存', advice: '主动和同学打招呼，会有意外收获。' },
+                { level: '上上签', text: '学运亨通', advice: '本学期你的努力会得到加倍回报。' },
+                { level: '中签', text: '小考顺利', advice: '平常心对待，会的全对，蒙的全对。' },
+                { level: '上签', text: '灵感爆发', advice: '创意类作业会特别出彩，大胆尝试。' },
+                { level: '中签', text: '稳扎稳打', advice: '不追求速成，每天进步一点点就很好。' },
+                { level: '上上签', text: '旗开得胜', advice: '开学第一周就会有好消息，注意查收。' },
+                { level: '中签', text: '渐入佳境', advice: '刚开始可能有点不适应，第二周会好转。' },
+                { level: '上签', text: '意外之喜', advice: '可能会收到一份意想不到的小礼物。' },
+                { level: '中签', text: '社交达人', advice: '新学期你的人缘会变得特别好。' },
+                { level: '上上签', text: '逢考必过', advice: '考试运爆棚，复习什么考什么。' },
+                { level: '上签', text: '自律觉醒', advice: '你会突然想学习，别拦着自己。' },
+                { level: '中签', text: '健康满分', advice: '早睡早起，身体状态会非常好。' },
+                { level: '上签', text: '才艺展示', advice: '有个机会让你展示隐藏技能，别害羞。' },
+                { level: '上上签', text: '心想事成', advice: '最近许的愿，都有可能实现哦。' },
+            ];
+
+            const box = document.getElementById('fortune-box');
+            const levelEl = document.getElementById('fortune-level');
+            const textEl = document.getElementById('fortune-text');
+            const adviceEl = document.getElementById('fortune-advice');
+            const btn = document.getElementById('fortune-btn');
+            const countEl = document.getElementById('fortune-count');
+            const totalEl = document.getElementById('fortune-total');
+
+            let todayCount = 0;
+            let totalCount = 0;
+
+            try {
+                const saved = localStorage.getItem('fortune_stats_2026');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    todayCount = data.todayCount || 0;
+                    totalCount = data.totalCount || 0;
+                }
+            } catch (e) { /* ignore */ }
+
+            function updateStats() {
+                countEl.textContent = todayCount;
+                totalEl.textContent = totalCount;
+                try {
+                    localStorage.setItem('fortune_stats_2026', JSON.stringify({ todayCount, totalCount }));
+                } catch (e) { /* ignore */ }
+            }
+
+            function drawFortune() {
+                const idx = Math.floor(Math.random() * fortunes.length);
+                const fortune = fortunes[idx];
+                levelEl.textContent = fortune.level;
+                textEl.textContent = fortune.text;
+                adviceEl.textContent = fortune.advice;
+
+                box.style.animation = 'none';
+                box.offsetHeight;
+                box.style.animation = 'fadeInUp 0.6s ease';
+                box.style.transform = 'translateY(0)';
+                box.style.transition = 'transform 0.3s ease';
+                box.style.transform = 'scale(0.98)';
+                setTimeout(() => { box.style.transform = 'scale(1)'; }, 50);
+
+                todayCount++;
+                totalCount++;
+                updateStats();
+            }
+
+            btn.addEventListener('click', drawFortune);
+            updateStats();
+        })();
+
+        // =========================================
+        // 7. 趣味任务卡
+        // =========================================
+        (function initTask() {
+            const tasks = [
+                { text: '给同桌一个真诚的微笑，并说"新学期一起加油"', reward: '✨ 奖励：心情+1，友情+1' },
+                { text: '整理书桌，把不需要的东西收起来', reward: '✨ 奖励：专注力+2' },
+                { text: '给一位老师发消息，说声"老师新学期好"', reward: '✨ 奖励：好感度+5' },
+                { text: '写下三个新学期的小目标，贴在显眼处', reward: '✨ 奖励：方向感+3' },
+                { text: '和同学分享一个暑假的趣事', reward: '✨ 奖励：快乐+2，友情+1' },
+                { text: '提前预习明天要上的第一节课', reward: '✨ 奖励：自信+4' },
+                { text: '做10个俯卧撑或开合跳，活动身体', reward: '✨ 奖励：活力+3' },
+                { text: '给未来的自己写一张明信片，放在书里', reward: '✨ 奖励：期待感+2' },
+                { text: '把手机调成静音，专注学习15分钟', reward: '✨ 奖励：专注力+5' },
+                { text: '帮助一位同学解决一个小问题', reward: '✨ 奖励：满足感+3，人缘+2' },
+                { text: '整理你的书包，丢掉不用的废纸', reward: '✨ 奖励：清爽度+3' },
+                { text: '对自己说一句鼓励的话，并记录下来', reward: '✨ 奖励：信心+2' },
+                { text: '课间去操场走一圈，呼吸新鲜空气', reward: '✨ 奖励：健康+2' },
+                { text: '给家长一个拥抱，说"谢谢你们"', reward: '✨ 奖励：家庭温暖+5' },
+                { text: '想一句新学期座右铭，写在笔记本扉页', reward: '✨ 奖励：信念+3' },
+            ];
+
+            const taskText = document.getElementById('task-text');
+            const taskReward = document.getElementById('task-reward');
+            const taskDate = document.getElementById('task-date');
+            const refreshBtn = document.getElementById('task-refresh-btn');
+            const completeBtn = document.getElementById('task-complete-btn');
+            const card = document.getElementById('task-card');
+
+            let currentTaskIndex = -1;
+            let completed = false;
+
+            function pickTask() {
+                const today = new Date().toDateString();
+                let savedDate = '';
+                try { savedDate = localStorage.getItem('task_date_2026') || ''; } catch (e) {}
+                if (savedDate === today && currentTaskIndex >= 0 && !completed) {
+                    return;
+                }
+                currentTaskIndex = Math.floor(Math.random() * tasks.length);
+                completed = false;
+                try { localStorage.setItem('task_date_2026', today); } catch (e) {}
+                renderTask();
+            }
+
+            function renderTask() {
+                if (currentTaskIndex < 0) {
+                    currentTaskIndex = Math.floor(Math.random() * tasks.length);
+                }
+                const task = tasks[currentTaskIndex];
+                taskText.textContent = task.text;
+                taskReward.textContent = task.reward;
+                taskDate.textContent = '今日任务 · ' + new Date().toLocaleDateString('zh-CN');
+                if (completed) {
+                    card.classList.add('task-completed');
+                } else {
+                    card.classList.remove('task-completed');
+                }
+            }
+
+            refreshBtn.addEventListener('click', () => {
+                currentTaskIndex = Math.floor(Math.random() * tasks.length);
+                completed = false;
+                const today = new Date().toDateString();
+                try { localStorage.setItem('task_date_2026', today); } catch (e) {}
+                renderTask();
+            });
+
+            completeBtn.addEventListener('click', () => {
+                completed = !completed;
+                renderTask();
+            });
+
+            // 初始化
+            const today = new Date().toDateString();
+            let savedDate = '';
+            try { savedDate = localStorage.getItem('task_date_2026') || ''; } catch (e) {}
+            if (savedDate === today) {
+                currentTaskIndex = Math.floor(Math.random() * tasks.length);
+            } else {
+                currentTaskIndex = Math.floor(Math.random() * tasks.length);
+                try { localStorage.setItem('task_date_2026', today); } catch (e) {}
+            }
+            completed = false;
+            renderTask();
+        })();
+
+        // =========================================
+        // 8. 每日一句
+        // =========================================
+        (function initQuote() {
+            const quotes = [
+                { text: '学如逆水行舟，不进则退。', author: '古人云' },
+                { text: '路漫漫其修远兮，吾将上下而求索。', author: '屈原' },
+                { text: '不要等待机会，而要创造机会。', author: '乔治·伯纳德·肖' },
+                { text: '成功不是将来才有的，而是从决定去做的那一刻起，持续累积而成。', author: '佚名' },
+                { text: '没有比脚更长的路，没有比人更高的山。', author: '汪国真' },
+                { text: '天行健，君子以自强不息。', author: '《周易》' },
+                { text: '读书破万卷，下笔如有神。', author: '杜甫' },
+                { text: '少壮不努力，老大徒伤悲。', author: '《长歌行》' },
+                { text: '宝剑锋从磨砺出，梅花香自苦寒来。', author: '《警世贤文》' },
+                { text: '为中华之崛起而读书。', author: '周恩来' },
+                { text: '人生在勤，不索何获。', author: '张衡' },
+                { text: '如果你想翻过一堵墙，先把帽子扔过去。', author: '西班牙谚语' },
+                { text: '心之所向，素履以往；生如逆旅，一苇以航。', author: '《尘曲》' },
+                { text: '宁可慢些，不要太急而错误；宁可笨些，不要太巧而败事。', author: '高尔斯华绥' },
+                { text: '每一个不曾起舞的日子，都是对生命的辜负。', author: '尼采' },
+                { text: '生活明朗，万物可爱，人间值得，未来可期。', author: '网络语录' },
+                { text: '愿你成为自己的太阳，无需凭借谁的光。', author: '佚名' },
+                { text: '星光不问赶路人，时光不负有心人。', author: '佚名' },
+            ];
+
+            const textEl = document.getElementById('quote-text');
+            const authorEl = document.getElementById('quote-author');
+            const btn = document.getElementById('quote-btn');
+            let currentIndex = 0;
+
+            function showQuote() {
+                const q = quotes[currentIndex];
+                textEl.textContent = q.text;
+                authorEl.textContent = '— ' + q.author;
+                textEl.style.animation = 'none';
+                textEl.offsetHeight;
+                textEl.style.animation = 'fadeInUp 0.4s ease';
+            }
+
+            btn.addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % quotes.length;
+                showQuote();
+            });
+
+            currentIndex = Math.floor(Math.random() * quotes.length);
+            showQuote();
+        })();
+
+        // =========================================
+        // 9. 滚动显示动画
+        // =========================================
+        (function initReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.08,
+                rootMargin: '0px 0px -40px 0px',
+            });
+
+            document.querySelectorAll('.reveal').forEach(el => {
+                observer.observe(el);
+            });
+        })();
+
+        // =========================================
+        // 10. 键盘快捷键
+        // =========================================
+        (function initShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'g' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                    const activeEl = document.activeElement;
+                    const isTyping = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName ===
+                        'TEXTAREA' || activeEl.tagName === 'SELECT');
+                    if (!isTyping) {
+                        e.preventDefault();
+                        const goalInput = document.getElementById('goal-input');
+                        goalInput.focus();
+                        goalInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+            });
+        })();
     </script>
 </body>
 </html>
