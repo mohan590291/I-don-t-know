@@ -112,11 +112,11 @@
         }
 
         @keyframes floatGlow {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            20% { transform: translate(15px, -20px) scale(1.03); }
-            40% { transform: translate(-10px, 12px) scale(0.98); }
-            60% { transform: translate(8px, 18px) scale(1.02); }
-            80% { transform: translate(-5px, -15px) scale(0.99); }
+            0%, 100% { transform: translate(calc(0px + var(--px, 0px)), calc(0px + var(--py, 0px))) scale(1); }
+            20% { transform: translate(calc(15px + var(--px, 0px)), calc(-20px + var(--py, 0px))) scale(1.03); }
+            40% { transform: translate(calc(-10px + var(--px, 0px)), calc(12px + var(--py, 0px))) scale(0.98); }
+            60% { transform: translate(calc(8px + var(--px, 0px)), calc(18px + var(--py, 0px))) scale(1.02); }
+            80% { transform: translate(calc(-5px + var(--px, 0px)), calc(-15px + var(--py, 0px))) scale(0.99); }
         }
 
         /* ============ 主容器 ============ */
@@ -133,9 +133,9 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(12, 12, 26, 0.75);
-            backdrop-filter: blur(28px) saturate(180%);
-            -webkit-backdrop-filter: blur(28px) saturate(180%);
+            background: rgba(12, 12, 26, 0.2);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             padding: 10px 0;
             transition: var(--transition);
@@ -258,6 +258,31 @@
             max-width: 560px;
             margin: 0 auto 36px;
             animation: fadeInUp 0.8s ease 0.15s both;
+        }
+
+        .hero-visual {
+            width: 120px;
+            height: 120px;
+            margin: 10px auto 24px;
+            border-radius: 36px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:4rem;
+            line-height: 0.9;
+            animation: floatBook 4s ease-in-out infinite;
+            backdrop-filter: blur(14px);
+        }
+        .hero-start {
+            display:inline-block;
+            text-decoration:none;
+            margin-bottom:36px;
+        }
+        @keyframes floatBook {
+            0%,100% { transform:translateY(0) rotate(-3deg); }
+            50% { transform:translateY(-10px) rotate(3deg); }
         }
 
         .countdown-wrapper {
@@ -918,6 +943,8 @@
             transform: translateY(0);
         }
 
+        .secondary-section { opacity:0.96; }
+
         /* ============ 响应式 ============ */
         @media (max-width: 768px) {
             .navbar .container {
@@ -936,7 +963,32 @@
                 padding: 6px 10px;
             }
             .hero { padding: 50px 0 40px; }
-            .countdown-wrapper { gap: 10px; }
+            .hero-visual {
+            width: 120px;
+            height: 120px;
+            margin: 10px auto 24px;
+            border-radius: 36px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:4rem;
+            line-height: 0.9;
+            animation: floatBook 4s ease-in-out infinite;
+            backdrop-filter: blur(14px);
+        }
+        .hero-start {
+            display:inline-block;
+            text-decoration:none;
+            margin-bottom:36px;
+        }
+        @keyframes floatBook {
+            0%,100% { transform:translateY(0) rotate(-3deg); }
+            50% { transform:translateY(-10px) rotate(3deg); }
+        }
+
+        .countdown-wrapper { gap: 10px; }
             .countdown-item { padding: 14px 16px; min-width: 70px; }
             .countdown-item .number { font-size: 1.8rem; }
             .countdown-separator { font-size: 1.8rem; }
@@ -945,6 +997,7 @@
             .goal-input-row input, .goal-input-row select { width: 100%; }
             .tips-grid { grid-template-columns: 1fr; }
             .resources-list { grid-template-columns: 1fr; }
+            .hero-visual { width:90px; height:90px; font-size:3rem; }
         }
 
         @media (max-width: 480px) {
@@ -992,10 +1045,12 @@
         <div class="container">
             <div class="badge">新学期倒计时 · 准备好了吗</div>
             <h1>新学期，从心出发</h1>
+            <div class="hero-visual" aria-hidden="true">📚✨</div>
             <p class="subtitle">
                 开学不是终点，而是一段全新旅程的起点。整理行囊、设定方向，
                 带着好奇与勇气，迎接属于你的新篇章。
             </p>
+            <a class="btn btn-primary hero-start" href="#checklist">开启新学期旅程</a>
             <div class="countdown-wrapper" id="countdown">
                 <!-- 由 JS 动态生成 -->
             </div>
@@ -1147,7 +1202,7 @@
     </section>
 
     <!-- ============ 学习资源推荐 ============ -->
-    <section id="resources">
+    <section id="resources" class="secondary-section">
         <div class="container">
             <div class="section-header reveal">
                 <h2>学习资源推荐</h2>
@@ -1168,7 +1223,7 @@
     </section>
 
     <!-- ============ 每日一句 ============ -->
-    <section id="quote">
+    <section id="quote" class="secondary-section">
         <div class="container">
             <div class="section-header reveal">
                 <h2>每日一句</h2>
@@ -1200,6 +1255,7 @@
             let width, height;
             let particles = [];
             let mouse = { x: null, y: null, radius: 140 };
+            let bursts = [];
             const PARTICLE_COUNT = 90;
             const COLORS = ['#7c3aed', '#06b6d4', '#a78bfa', '#22d3ee', '#f59e0b', '#ec4899'];
 
@@ -1267,7 +1323,7 @@
                     ctx.fill();
                 }
 
-                ctx.globalAlpha = 1;
+                ctx.globalAlpha = 0.1;
                 for (let i = 0; i < particles.length; i++) {
                     for (let j = i + 1; j < particles.length; j++) {
                         const dx = particles[i].x - particles[j].x;
@@ -1303,13 +1359,50 @@
                     }
                 }
 
-                ctx.globalAlpha = 1;
+                ctx.globalAlpha = 0.1;
+
+                // 点击爆发粒子
+                for (let i = bursts.length - 1; i >= 0; i--) {
+                    const b = bursts[i];
+                    b.x += b.vx;
+                    b.y += b.vy;
+                    b.vx *= 0.96;
+                    b.vy *= 0.96;
+                    b.life -= 0.018;
+                    if (b.life <= 0) {
+                        bursts.splice(i, 1);
+                        continue;
+                    }
+                    ctx.beginPath();
+                    ctx.arc(b.x, b.y, b.radius * b.life, 0, Math.PI * 2);
+                    ctx.fillStyle = b.color;
+                    ctx.globalAlpha = b.life * 0.7;
+                    ctx.fill();
+                }
+                ctx.globalAlpha = 0.1;
+
                 requestAnimationFrame(animate);
             }
 
             window.addEventListener('mousemove', (e) => {
                 mouse.x = e.clientX;
                 mouse.y = e.clientY;
+            });
+            window.addEventListener('click', (e) => {
+                const count = 18;
+                for (let i = 0; i < count; i++) {
+                    const angle = (Math.PI * 2 * i) / count + Math.random() * 0.3;
+                    const speed = Math.random() * 3 + 1.5;
+                    bursts.push({
+                        x: e.clientX,
+                        y: e.clientY,
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed,
+                        radius: Math.random() * 3 + 1.5,
+                        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+                        life: 1
+                    });
+                }
             });
             window.addEventListener('mouseleave', () => {
                 mouse.x = null;
@@ -1338,6 +1431,39 @@
 
             init();
             animate();
+        })();
+
+        // 背景光晕视差跟随
+        (function initParallax() {
+            const glows = document.querySelectorAll('.bg-glow');
+            const depths = [0.018, 0.025, 0.035, 0.03];
+            let cx = window.innerWidth / 2;
+            let cy = window.innerHeight / 2;
+            let curX = cx, curY = cy;
+            let tgtX = cx, tgtY = cy;
+
+            function tick() {
+                curX += (tgtX - curX) * 0.06;
+                curY += (tgtY - curY) * 0.06;
+                const dx = curX - cx;
+                const dy = curY - cy;
+                glows.forEach((g, i) => {
+                    const d = depths[i] || 0.025;
+                    g.style.setProperty('--px', (dx * d).toFixed(1) + 'px');
+                    g.style.setProperty('--py', (dy * d).toFixed(1) + 'px');
+                });
+                requestAnimationFrame(tick);
+            }
+
+            window.addEventListener('mousemove', (e) => {
+                tgtX = e.clientX;
+                tgtY = e.clientY;
+            });
+            window.addEventListener('resize', () => {
+                cx = window.innerWidth / 2;
+                cy = window.innerHeight / 2;
+            });
+            tick();
         })();
 
         // =========================================
